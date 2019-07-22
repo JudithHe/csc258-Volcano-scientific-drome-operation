@@ -70,32 +70,35 @@ module draw
     
 endmodule
 
-// Bird, moving in vertical direction
-module bird(input clk, input clear, input game_over, input[9:0] bird_pos, input up, output reg [9:0] bird_new_pos);
-	initial bird_new_pos = bird_pos;
+// Plane, moving in vertical direction
+module plane(input clk, input resetn, input game_over, input[9:0] plane_pos, input up, input down, output reg [9:0] plane_new_pos);
+	initial plane_new_pos = plane_pos;
 	
-	always @(posedge clk, negedge clear)
+	always @(posedge clk, negedge resetn)
 		begin
-			if (~clear) bird_new_pos = 9'd0;
+			if (~resetn) plane_new_pos = 9'd0;
 			else if (~game_over) begin
-				if((up==1) and (bird_new_pos>=9'd12)) bird_new_pos <= bird_new_pos - 9'd8;
-				else if ((down==1) and (bird_new_pos<=9'd107)) bird_new_pos <= bird_new_pos + 9'd8;
-				else if (bird_new_pos >=9'd107) bird_new_pos <= 9'd107;
-				else if (bird_new_pos <=9'd12) bird_new_pos <= 9'd12;
+				if((up==1) and (plane_new_pos>=9'd12)) plane_new_pos <= plane_new_pos - 9'd8;
+				else if ((down==1) and (plane_new_pos<=9'd107)) plane_new_pos <= plane_new_pos + 9'd8;
+				else if (plane_new_pos >=9'd107) plane_new_pos <= 9'd107;
+				else if (plane_new_pos <=9'd12) plane_new_pos <= 9'd12;
 			end// if end
 		end// always end 
 endmodule
 
 // Lava drops, moving in horizontal direction
-module lava(input clk, input clear, input game_over, output reg [9:0] lava_new_pos);
+module lava(input clk, input resetn, input game_over, input [6:0] score, output reg [9:0] lava_new_pos);
 	initial lava_new_pos = 9'd155;
 	
-	always @(posedge clk, negedge clear)
+	always @(posedge clk, negedge resetn)
 		begin
-			if (~clear) lava_new_pos = 9'd155;
+			if (~resetn) lava_new_pos = 9'd155;
 			else if (~game_over) begin
 				if(lava_new_pos>=9'd12) lava_new_pos <= lava_new_pos - 9'd8;
-				else lava_new_pos <=9'd155;
+				else begin
+						lava_new_pos <=9'd155;
+						score <= score +1'd1;
+					end
 			end// if end
 		end// always end 
 endmodule
@@ -110,27 +113,29 @@ module random_generator(input clk, input resetn, output [3:0] rand_out);
 	assign rand_out = temp[3:0];
 endmodule
 
-module tube(input clk, input clear, input game_over, input [3:0]rand_offset output reg[9:0] tube1_x, output reg[9:0] tube1_y,output reg[9:0] tube2_x,output reg[9:0] tube2_y);
-	reg[9:0] tube_y;
-	always @(posedge clk, negedge clear)
+module mountain(input clk, input resetn, input game_over, input [3:0]rand_offset output reg[9:0] mountain1_x, output reg[9:0] mountain1_y,output reg[9:0] mountain2_x,output reg[9:0] mountain2_y);
+	reg[9:0] mountain_y;
+	always @(posedge clk, negedge resetn)
 		begin
-			if (~clear) begin
-				tube1_x<=9'd70;
-				tube1_y<=9'd50;
-				tube2_x<=9'130;
-				tube2_y<=9'd50;
+			if (~resetn) begin
+				mountain1_x<=9'd70;
+				mountain1_y<=9'd50;
+				mountain2_x<=9'130;
+				mountain2_y<=9'd50;
 			end
 			else if (~game_over) begin
-				tube_y <= 9'd50+rand_offset;
-				tube1_x <= tube1_x-9'd5;
-				tube2_x <= tube1_x-9'd5;
-				if (tube1_x <=9'd60) begin
-					tube1_x <= 9'd130;
-					tube1_y <= tube_y;
+				mountain_y <= 9'd50+rand_offset;
+				mountain1_x <= mountain1_x-9'd5;
+				mountain2_x <= mountain1_x-9'd5;
+				if (mountain1_x <=9'd60) begin
+					mountain1_x <= 9'd130;
+					mountain1_y <= mountain_y;
+					score <= score +1'd1;
 				end
-				if (tube2_x <=9'd60) begin
-					tube2_x <= 9'd130;
-					tube2_y <= tube_y;
+				if (mountain2_x <=9'd60) begin
+					mountain2_x <= 9'd130;
+					mountain2_y <= mountain_y;
+					score <= score +1'd1;
 				end
 			end// if end
 		end// always end 

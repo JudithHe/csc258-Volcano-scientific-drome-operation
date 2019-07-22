@@ -62,8 +62,8 @@ module ShiftRegister(q, d, clock, reset_n, enable);
 endmodule
 
 //RATE dividers to slower the clock
-module rateDivider(old_clock, new_clock, clear);
-	//0.5s
+module screenRollClock(old_clock, new_clock, clear);
+	// 1s
 	input old_clock, clear;
 	output new_clock;
 	reg out_clock;
@@ -78,7 +78,7 @@ module rateDivider(old_clock, new_clock, clear);
 			begin
 				if(counter ==0) 
 					begin
-						counter <= 25'd24_999_999;
+						counter <= 25'd49_999_999;
        						out_clock <= ~out_clock;
     					end else begin
         					counter <= counter - 25'd1;
