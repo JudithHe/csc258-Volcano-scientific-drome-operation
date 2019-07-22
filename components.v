@@ -39,6 +39,7 @@ module MyTFF(t,clk, reset, q);
 	 end
 	 assign q = q1;
 endmodule
+
 // Shift register
 module ShiftRegister(q, d, clock, reset_n, enable);
 	input enable;
