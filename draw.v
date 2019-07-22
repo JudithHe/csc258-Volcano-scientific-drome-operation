@@ -67,36 +67,37 @@ module draw
 			
 	// Put your code here. Your code should produce signals x,y,colour and writeEn/plot
 	// for the VGA controller, in addition to any other functionality your design may require.
-    
+		
 endmodule
 
 // Plane, moving in vertical direction
-module plane(input clk, input resetn, input game_over, input[9:0] plane_pos, input up, input down, output reg [9:0] plane_new_pos);
-	initial plane_new_pos = plane_pos;
+module plane(input clk, input resetn, 
+input game_over, input[9:0] plane_pos, input up, input down, output reg [9:0] plane_y);
+	initial plane_y = plane_pos;
 	
 	always @(posedge clk, negedge resetn)
 		begin
-			if (~resetn) plane_new_pos = 9'd0;
+			if (~resetn) plane_y = 9'd0;
 			else if (~game_over) begin
-				if((up==1) and (plane_new_pos>=9'd12)) plane_new_pos <= plane_new_pos - 9'd8;
-				else if ((down==1) and (plane_new_pos<=9'd107)) plane_new_pos <= plane_new_pos + 9'd8;
-				else if (plane_new_pos >=9'd107) plane_new_pos <= 9'd107;
-				else if (plane_new_pos <=9'd12) plane_new_pos <= 9'd12;
+				if((up==1) and (plane_y>=9'd12)) plane_y <= plane_y - 9'd8;
+				else if ((down==1) and (plane_y<=9'd107)) plane_y <= plane_y + 9'd8;
+				else if (plane_y >=9'd107) plane_y <= 9'd107;
+				else if (plane_y <=9'd12) plane_y <= 9'd12;
 			end// if end
 		end// always end 
 endmodule
 
 // Lava drops, moving in horizontal direction
-module lava(input clk, input resetn, input game_over, input [6:0] score, output reg [9:0] lava_new_pos);
-	initial lava_new_pos = 9'd155;
-	
+module lava(input clk, input resetn, input game_over, input [6:0] score, output reg[9:0] lava_x, output [9:0]lava_y);
+	initial lava_x = 9'd155;
+	random_generator rand_offset_lava(.clk(clk), .resetn(resetn), .rand_out(lava_y));
 	always @(posedge clk, negedge resetn)
 		begin
-			if (~resetn) lava_new_pos = 9'd155;
+			if (~resetn) lava_x = 9'd155;
 			else if (~game_over) begin
-				if(lava_new_pos>=9'd12) lava_new_pos <= lava_new_pos - 9'd8;
+				if(lava_x>=9'd12) lava_x <= lava_x - 9'd8;
 				else begin
-						lava_new_pos <=9'd155;
+						lava_x <=9'd155;
 						score <= score +1'd1;
 					end
 			end// if end
@@ -113,7 +114,10 @@ module random_generator(input clk, input resetn, output [3:0] rand_out);
 	assign rand_out = temp[3:0];
 endmodule
 
-module mountain(input clk, input resetn, input game_over, input [3:0]rand_offset output reg[9:0] mountain1_x, output reg[9:0] mountain1_y,output reg[9:0] mountain2_x,output reg[9:0] mountain2_y);
+//TODO: 2 mountains should have diff random number generator
+module mountain(input clk, input resetn, input game_over, 
+input [3:0]rand_offset,output reg [3:0]score,output reg[9:0] mountain1_x, 
+output reg[9:0] mountain1_y,output reg[9:0] mountain2_x,output reg[9:0] mountain2_y);
 	reg[9:0] mountain_y;
 	always @(posedge clk, negedge resetn)
 		begin
@@ -125,8 +129,8 @@ module mountain(input clk, input resetn, input game_over, input [3:0]rand_offset
 			end
 			else if (~game_over) begin
 				mountain_y <= 9'd50+rand_offset;
-				mountain1_x <= mountain1_x-9'd5;
-				mountain2_x <= mountain1_x-9'd5;
+				mountain1_x <= mountain1_x-9'd10;
+				mountain2_x <= mountain1_x-9'd10;
 				if (mountain1_x <=9'd60) begin
 					mountain1_x <= 9'd130;
 					mountain1_y <= mountain_y;
