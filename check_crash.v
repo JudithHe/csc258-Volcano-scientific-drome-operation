@@ -10,15 +10,18 @@ module check_crash(
     output game_over
     );
 	
+	//game_over is 1 when plane crashes with something else | reset is pressed.
+	//Otherwise, game_over is 0 & the game continues.
+	
 	wire crash;
 	wire [9:0]plane_x;
 	
-	assign plane_x = 9'd30;
+	assign plane_x = 9'd80;
 	
-	assign crash = (((plane_y+9'd4 >= mountain1_y+9'd50) or (plane_y-9'd4 >=mountain1_y-9'd50)) and (plane_x+9'd4 >= mountain1_x))
-				or (((plane_y+9'd4 >= mountain2_y+9'd50) or (plane_y-9'd4 >=mountain2_y-9'd50))and (plane_x+9'd4 >= mountain2_x))
-				or (((plane_y+9'd4 >= lava_y+9'd4) or (plane_y-9'd4 >=lava_y-9'd4)) 
-				and( plane_x+9'd4 >= lava_x-9'd4));
+	assign crash = (((plane_y+9'd8 >= mountain1_y+9'd50) | (plane_y-9'd8 >=mountain1_y-9'd50)) & (plane_x+9'd8 >= mountain1_x))
+				| (((plane_y+9'd8 >= mountain2_y+9'd50) | (plane_y-9'd8 >=mountain2_y-9'd50))& (plane_x+9'd8 >= mountain2_x))
+				| (((plane_y+9'd8 >= lava_y+9'd8) | (plane_y-9'd4 >=lava_y-9'd8)) 
+				&( plane_x+9'd8 >= lava_x-9'd8));
 				
-	assign game_over = (!resetn or crash)? 1'b1 : 1'b0;
+	assign game_over = (~resetn | crash)? 1'b1 : 1'b0;
 endmodule

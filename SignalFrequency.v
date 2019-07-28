@@ -15,7 +15,7 @@ module SignalFrequency(
 	always @ (posedge clk) begin
         begin
 			count <= count + 1;
-			if (count == 2500000) begin
+			if (count == 250_0000) begin
 				count <= 0;
 				clk10 <= ~clk10;
 			end
