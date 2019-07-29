@@ -1,11 +1,11 @@
 // Plane, moving in vertical direction
 module plane(input clk, input resetn, 
 input game_over,  input up, input down, output reg [9:0] plane_y);
-	initial plane_y = 9'd80;
+	initial plane_y = 9'd50;
 
 	always @(posedge clk, negedge resetn)
 		begin
-			if (~resetn) plane_y = 9'd80;
+			if (~resetn) plane_y <= 9'd50;
 			else if (~game_over)//game_over = 0 means game continues
 			begin
 				if((up==1) &&(plane_y>=9'd40)) plane_y <= plane_y - 9'd8; // 40 is upper bound of the active drawing region
@@ -17,17 +17,16 @@ input game_over,  input up, input down, output reg [9:0] plane_y);
 endmodule
 
 // Lava drops, moving in horizontal direction
-module lava(input clk, input resetn, input game_over, output reg[6:0]score, output reg[9:0] lava_x, output [9:0]lava_y);
-	initial lava_x = 9'd600;
-	//random_generator rand_offset_lava(.clk(clk), .resetn(resetn), .rand_out(lava_y));
+module lava(input clk, input resetn, input game_over, output reg[6:0]score, output reg [9:0]lava_x);
+	
 	always @(posedge clk, negedge resetn)
 		begin
-			if (~resetn) lava_x = 9'd300;
+			if (~resetn) lava_x <= 9'd550;
 			else if (~game_over) 
 				begin
-					if(lava_x>=9'd120) lava_x <= lava_x - 9'd8;
-					else begin
-							lava_x <=9'd300;
+					lava_x <= lava_x - 9'd10;
+					if (lava_x <= 9'd60)begin
+							lava_x <= 9'd550;
 							score <= score +1'd1;
 						end
 				end// if end
@@ -55,18 +54,18 @@ module mountain(input clk, input resetn, input game_over,
 	always @(posedge clk, negedge resetn)
 		begin
 			if (~resetn) begin
-				mountain1_x<=9'd250;
-				mountain1_y<=9'd100;
+				mountain1_x<=9'd300;
+				mountain1_y<=9'd150;
 				mountain2_x<=9'd500;
-				mountain2_y<=9'd100;
+				mountain2_y<=9'd150;
 			end
 			else if (~game_over) //if game continues
 				begin
-					mountain_y <= 9'd100+rand_offset;
-					mountain1_x <= mountain1_x-9'd5;
-					mountain2_x <= mountain1_x-9'd5;
+					mountain_y <= 9'd150+rand_offset;
+					mountain1_x <= mountain1_x-9'd10;
+					mountain2_x <= mountain2_x-9'd10;
 				if (mountain1_x <=9'd60) begin
-					mountain1_x <= 9'd250;
+					mountain1_x <= 9'd500;
 					mountain1_y <= mountain_y;
 					score <= score +1'd1;
 				end

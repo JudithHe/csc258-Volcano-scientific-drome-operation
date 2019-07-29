@@ -68,7 +68,7 @@ module screenRollClock(old_clock, new_clock, clear);
 	output new_clock;
 	reg out_clock;
 	reg [26:0]counter;
-	always @(posedge old_clock, negedge old_clock, negedge clear)
+	always @(posedge old_clock, negedge clear)
 	begin
 		if (~clear) begin // active low
 			out_clock <=0;
@@ -78,8 +78,8 @@ module screenRollClock(old_clock, new_clock, clear);
 			begin
 				if(counter ==0) 
 					begin
-						counter <= 25'd49_999_999;
-       						out_clock <= ~out_clock;
+						counter <= 27'd999_999;
+       				out_clock <= ~out_clock;
     					end else begin
         					counter <= counter - 25'd1;
     					end

@@ -65,7 +65,7 @@ module VGA_Controller(
 		// set display to true when we're in the color scan region of the horizontal pulse 
 		if((H_pos > (H_front_porch + H_synch_pulse + H_back_porch))) begin
 				display <= 1'b1;
-				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1);
+				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1)+100;
 				Y <= V_pos - (V_front_porch + V_synch_pulse + V_back_porch -1);
 		end else begin
 				display <= 1'b0;

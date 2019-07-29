@@ -6,7 +6,6 @@ module check_crash(
     input [9:0] mountain2_x,
     input [9:0] mountain2_y,
     input [9:0] lava_x,
-    input [9:0] lava_y,
     output game_over
     );
 	
@@ -16,12 +15,12 @@ module check_crash(
 	wire crash;
 	wire [9:0]plane_x;
 	
-	assign plane_x = 9'd80;
+	assign plane_x = 9'd100;
+	assign lava_y = 9'd100;
 	
-	assign crash = (((plane_y+9'd8 >= mountain1_y+9'd50) | (plane_y-9'd8 >=mountain1_y-9'd50)) & (plane_x+9'd8 >= mountain1_x))
-				| (((plane_y+9'd8 >= mountain2_y+9'd50) | (plane_y-9'd8 >=mountain2_y-9'd50))& (plane_x+9'd8 >= mountain2_x))
-				| (((plane_y+9'd8 >= lava_y+9'd8) | (plane_y-9'd4 >=lava_y-9'd8)) 
-				&( plane_x+9'd8 >= lava_x-9'd8));
+	assign crash = (((plane_y+9'd8 >= mountain1_y) | (plane_y-9'd8 >=mountain1_y)) & (plane_x+9'd8 >= mountain1_x))
+				| (((plane_y+9'd8 >= mountain2_y) | (plane_y-9'd8 >=mountain2_y))& (plane_x+9'd8 >= mountain2_x))
+				| ((( plane_x+9'd8 == lava_x)| ( plane_x== lava_x))& ((plane_y+9'd8==lava_y) | (plane_y==lava_y)));
 				
 	assign game_over = (~resetn | crash)? 1'b1 : 1'b0;
 endmodule

@@ -17,7 +17,7 @@ module SevenSegScoreDisplay(
 	begin
 				dig_2 <= score / 8'd100; // score/100
 				dig_1 <= (score / 8'd10) % 8'd10;  // (score/10)%10
-				dig_0 <= score % 8'd10; // score%10
+				dig_0 <= (score / 8'd10) % 8'd10; // score%10
 	end
 	
 	dec_decoder D0(

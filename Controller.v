@@ -2,6 +2,7 @@
 // we can draw the corresponding object in the correct region
 module Controller(
 	input clk,
+	input clk10,
 	input bright,
 	input [9:0] x, //curser for drawing stuff
 	input [9:0] y, //curser for drawing stuff
@@ -11,7 +12,6 @@ module Controller(
 	input [9:0] mountain2_x,
 	input [9:0] mountain2_y,
 	input [9:0] lava_x,
-	//input [9:0] lava_y,
 	input game_over,
 	input [7:0] score,
 	output reg [7:0] red,
@@ -21,15 +21,17 @@ module Controller(
 	
 	// Set initial plane_x
 	wire [9:0] plane_x;
-	assign plane_x = 10'd80;
+	assign plane_x = 10'd100;
 	// Set lava_y(need to change it later)
+	wire [3:0] lava_offset;
+	random_generator rand_offset_lava(.clk(clk10), .resetn(resetn), .rand_out(lava_offset));
 	wire [9:0] lava_y;
-	assign lava_y= 10'd100;
+	assign lava_y =10'd100+lava_offset;
 	
-	
-	
+
 	always @ (posedge clk) begin
 		// Gaming!
+		
 		if (~game_over) 
 		begin
 			if (~bright)
@@ -47,8 +49,8 @@ module Controller(
 				blue = 8'b11111111;
 			end	
 			else if (
-				((x >= mountain1_x-10'd25) && (x <= mountain1_x + 10'd25) && ( y >= mountain1_y)) || 
-				((x >= mountain2_x-10'd25) && (x <= mountain2_x + 10'd25) && ( y >= mountain2_y)) 
+				((x >= mountain1_x) && (x <= mountain1_x + 10'd30) && ( y >= mountain1_y)) || 
+				((x >= mountain2_x) && (x <= mountain2_x + 10'd30) && ( y >= mountain2_y)) 
 				)
 				begin
 				// draw the green mountains
