@@ -70,7 +70,7 @@ module Top_Level_Game(
 		.VGAclk(vgaclk)
 		);
 	
-	SevenSegScoreDisplay seven_seg_score_display(
+	ScoreDisplay score_display(
 		.clk(vgaclk),
 		.score(score),
 		.HEX0(HEX0),
@@ -80,6 +80,7 @@ module Top_Level_Game(
 	
 	SignalFrequency signalfrequency(
 		.clk(CLOCK_50),
+		.game_level(SW[1]),
 		.clk10(clk10)
 		);
 		
