@@ -5,10 +5,6 @@ module ScoreDisplay(
 	output [6:0] HEX2, HEX1, HEX0 
     );
 	
-	// clk: 50MHz clock signal
-	// score: the score won in the game
-	
-	
 	reg [3:0] dig_2;
 	reg [3:0] dig_1;
 	reg [3:0] dig_0;

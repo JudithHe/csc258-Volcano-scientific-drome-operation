@@ -1,6 +1,12 @@
 // Plane, moving in vertical direction
-module plane(input clk, input resetn, 
-input game_over,  input up, input down, output reg [9:0] plane_y);
+module plane(
+	input clk, 
+	input resetn, 
+	input game_over, 
+	input up, 
+	input down, 
+	output reg [9:0] plane_y);
+
 	initial plane_y = 9'd50;
 
 	always @(posedge clk, negedge resetn)
@@ -16,37 +22,55 @@ input game_over,  input up, input down, output reg [9:0] plane_y);
 		end
 endmodule
 
+
 // Lava drops, moving in horizontal direction
-module lava(input clk, input resetn, input game_over, output reg[6:0]score, output reg [9:0]lava_x);
-	
+module lava(
+	input clk, 
+	input resetn, 
+	input game_over, 
+	output reg[6:0]score, 
+	output reg [9:0]lava_x
+	output reg [9:0]lava_y);
+
+	//generate a random height of the lava drop
+	reg [3:0] rand_offset;
+	random_generator rand_offset_lava(.clk(clk), .resetn(resetn), .rand_out(lava_offset));
+
 	always @(posedge clk, negedge resetn)
 		begin
-			if (~resetn) lava_x <= 9'd550;
+			if (~resetn) 
+			begin
+				lava_x <= 9'd550;
+				lava_y <= 9'd100;
+			end
 			else if (~game_over) 
 				begin
 					lava_x <= lava_x - 9'd10;
 					if (lava_x <= 9'd60)begin
 							lava_x <= 9'd550;
+							if(lava_y >= 9'd440)
+							begin
+								lava_y <=9'd100;
+							else
+								lava_y <=lava_y+lava_offset;
+							end
 							score <= score +1'd1;
 						end
 				end// if end
 		end// always end 
 endmodule
 
-module random_generator(input clk, input resetn, output [3:0] rand_out);
-	reg [3:0] temp;
-	always @(posedge clk, negedge resetn)
-	begin 
-		if (~resetn) temp <= 4'hf; 
-		else temp <= {(temp[3]^temp[1]), temp[1:0], temp[3]};	
-	end//always end
-	assign rand_out = temp[3:0];
-endmodule
-
 //TODO: 2 mountains should have diff random number generator
-module mountain(input clk, input resetn, input game_over, 
-	output reg [3:0]score,output reg[9:0] mountain1_x, 
-	output reg[9:0] mountain1_y,output reg[9:0] mountain2_x,output reg[9:0] mountain2_y);
+module mountain(
+	input clk, 
+	input resetn, 
+	input game_over, 
+	output reg [3:0]score,
+	output reg[9:0] mountain1_x, 
+	output reg[9:0] mountain1_y,
+	output reg[9:0] mountain2_x,
+	output reg[9:0] mountain2_y);
+
 	reg[9:0] mountain_y;
 	wire[3:0] rand_offset;
 	
@@ -76,4 +100,20 @@ module mountain(input clk, input resetn, input game_over,
 				end
 			end// if end
 		end// always end 
+endmodule
+
+module random_generator(
+	input clk, 
+	input resetn, 
+	output [3:0] rand_out);
+
+	reg [3:0] temp;
+
+	always @(posedge clk, negedge resetn)
+	begin 
+		if (~resetn) temp <= 4'hf; 
+		else temp <= {(temp[3]^temp[1]), temp[1:0], temp[3]};	
+	end
+
+	assign rand_out = temp[3:0];
 endmodule

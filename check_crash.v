@@ -6,6 +6,7 @@ module check_crash(
     input [9:0] mountain2_x,
     input [9:0] mountain2_y,
     input [9:0] lava_x,
+    input [9:0] lava_y,
     output game_over
     );
 	
