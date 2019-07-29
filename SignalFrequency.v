@@ -1,6 +1,8 @@
+//Determine the speed of the game
 module SignalFrequency(
     // input CLOCK_50, //for test
-	 input clk,
+	input clk,
+	input game_level,//has normal level:0 or difficult level:1
     output reg clk10
     );
 	 
@@ -9,17 +11,30 @@ module SignalFrequency(
 	initial
 	begin
 		count = 0;
+		game_level = 0;
 		clk10 = 1;
 	end
 	
-	always @ (posedge clk) begin
-        begin
-			count <= count + 1;
-			if (count == 250_0000) begin
-				count <= 0;
-				clk10 <= ~clk10;
+	always @ (posedge clk) 
+	begin
+		if(game_level == 0)
+	        begin
+				count <= count + 1;
+				if (count == 250_0000) 
+					begin
+						count <= 0;
+						clk10 <= ~clk10;
+					end
 			end
-		end
+		else(game_level == 1)
+			begin
+				count <= count + 1;
+				if (count == 125_0000) 
+					begin
+						count <= 0;
+						clk10 <= ~clk10;
+					end
+			end
 	end
 
 endmodule
