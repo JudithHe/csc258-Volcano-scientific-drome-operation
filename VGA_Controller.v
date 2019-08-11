@@ -1,6 +1,6 @@
 module VGA_Controller(
 	input clk,
-	input reset,
+	input resetn,
 	output reg vga_HS,
 	output reg vga_VS,
 	output reg [9:0] X,
@@ -28,8 +28,8 @@ module VGA_Controller(
 	
 
 	// generate the horizontal and verticle synch signals
-	always @(posedge clk, negedge reset) begin
-	 if (!reset) begin
+	always @(posedge clk, negedge resetn) begin
+	 if (!resetn) begin
 		H_pos <= 0;
 		V_pos <= 0;
 		end
@@ -44,7 +44,6 @@ module VGA_Controller(
 			end else begin
 				V_pos <= 0;
 			end
-			
 		end
 		
 		// generate the vs and hs signals
@@ -66,7 +65,7 @@ module VGA_Controller(
 		// set display to true when we're in the color scan region of the horizontal pulse 
 		if((H_pos > (H_front_porch + H_synch_pulse + H_back_porch))) begin
 				display <= 1'b1;
-				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1) + 144;
+				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1)+144;
 				Y <= V_pos - (V_front_porch + V_synch_pulse + V_back_porch -1);
 			
 		end else begin
