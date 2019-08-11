@@ -11,9 +11,8 @@ module Controller(
 	input [9:0] mountain2_x,
 	input [9:0] mountain2_y,
 	input [9:0] lava_x,
-	//input [9:0] lava_y,
+	input [9:0] lava_y,
 	input game_over,
-	input [7:0] score,
 	output reg [7:0] red,
 	output reg [7:0] green,
 	output reg [7:0] blue
@@ -21,13 +20,10 @@ module Controller(
 	
 	// Set initial plane_x
 	wire [9:0] plane_x;
-	assign plane_x = 10'd120;
-	// Set lava_y(need to change it later)
-	wire [9:0] lava_y;
-	assign lava_y= 10'd100;
+	assign plane_x = 10'd100;
 	
 	
-	
+
 	always @ (posedge clk) begin
 		// Gaming!
 		if (~game_over) 
@@ -47,8 +43,8 @@ module Controller(
 				blue = 8'b11111111;
 			end	
 			else if (
-				((x >= mountain1_x) && (x <= mountain1_x + 10'd50) && ( y >= mountain1_y)) || 
-				((x >= mountain2_x) && (x <= mountain2_x + 10'd50) && (y >= mountain2_y )) 
+				((x >= mountain1_x) && (x <= mountain1_x + 10'd30) && ( y >= mountain1_y)) || 
+				((x >= mountain2_x) && (x <= mountain2_x + 10'd30) && ( y >= mountain2_y)) 
 				)
 				begin
 				// draw the green mountains
@@ -56,7 +52,7 @@ module Controller(
 				green = 8'b11111111;
 				blue = 8'b0; 
 				end
-			else if((x >= lava_x) && (x <= lava_x + 10'd16) && (y >= lava_y) && (y <= lava_y + 10'd16))
+			else if ((x >= lava_x) && (x <= lava_x + 10'd16) && (y >= lava_y) && (y <= lava_y + 10'd16))
 			begin
 				// draw the red lava
 				red = 8'b11111111;

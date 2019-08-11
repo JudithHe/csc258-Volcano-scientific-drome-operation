@@ -21,7 +21,7 @@ module VGA_Controller(
 	parameter V_front_porch=10;
 	parameter V_synch_pulse=2;
 	parameter V_back_porch=33;
-	parameter V_scan_width=525;
+		parameter V_scan_width=525;
 	
 	// registers for holding the vga coordinates of the screen we're currently wring to
 	reg [9:0] V_pos,H_pos;
@@ -65,9 +65,8 @@ module VGA_Controller(
 		// set display to true when we're in the color scan region of the horizontal pulse 
 		if((H_pos > (H_front_porch + H_synch_pulse + H_back_porch))) begin
 				display <= 1'b1;
-				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1)+144;
+				X <= H_pos - (H_front_porch + H_synch_pulse + H_back_porch -1)+100;
 				Y <= V_pos - (V_front_porch + V_synch_pulse + V_back_porch -1);
-			
 		end else begin
 				display <= 1'b0;
 				X <= 0;

@@ -9,9 +9,10 @@ module VGAFrequency(
 	begin
 		VGAclk = 1;
 	end
-	
-	always @ (posedge clk) begin
-				VGAclk <= ~VGAclk; // VGAclk is 25 MHz since CLOCK_50 is 50MHZ
+
+	always @ (posedge clk) 
+	begin
+		VGAclk <= ~VGAclk; // VGAclk is 25 MHz since CLOCK_50 is 50MHZ
 	end
 
 endmodule
