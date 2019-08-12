@@ -44,12 +44,13 @@ module lava(
 		begin
 			if (~resetn) 
 			begin
+				score<=1'd0;
 				lava_x <= 9'd400;
 				lava_y <= 9'd50;
 			end
 			else if (~game_over) 
 				begin
-				if (difficulty) lava_x <= lava_x-rand_offset2;
+				if (difficulty) lava_x <= lava_x-9'd15;
 				else lava_x <= lava_x - 9'd10;
 					if (lava_x <= 9'd60)begin
 							lava_x <= 9'd400;

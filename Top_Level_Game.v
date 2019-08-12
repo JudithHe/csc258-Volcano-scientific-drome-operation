@@ -18,7 +18,9 @@ module Top_Level_Game(
 	inout FPGA_I2C_SDAT,
 	// Audio CODEC
 	output AUD_XCK,
-	input AUD_DACLRCK, AUD_ADCLRCK, AUD_BCLK,
+	inout AUD_BCLK,
+	inout AUD_ADCLRCK,
+	inout AUD_DACLRCK,
 	input AUD_ADCDAT,
 	output AUD_DACDAT
     );
@@ -138,15 +140,14 @@ module Top_Level_Game(
 		
 	// Local wires.
 	wire read_ready, write_ready, read, write;
-	wire [23:0] readdata_left, readdata_right;
-	wire [23:0] writedata_left, writedata_right;
-	wire reset = ~KEY[0];
+	wire [27:0] readdata_left, readdata_right;
+	wire [27:0] writedata_left, writedata_right;
+	wire reset = ~KEY[1];
 
 	/////////////////////////////////
 	// Your code goes here 
 	/////////////////////////////////
-	play tone(read, vgaclk, KEY[2]);
-	
+	music player(.clk(AUD_XCK),.speaker(write),.reset(reset));
 /////////////////////////////////////////////////////////////////////////////////
 // Audio CODEC interface. 
 //
