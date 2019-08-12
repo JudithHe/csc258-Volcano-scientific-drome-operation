@@ -17,8 +17,9 @@ pqr stackexchange page - working solution to troubleshoot the speaker's buzzing 
 2. Controller.v-> draw the current scene of the game given the coordinates of each object (the coordinates represent the top left corner of each object).  
 3. draw.v -> draw objects in the game including lava(represented by a red 16\times16 square), 2 mountains(represented by 2 green rectangles with width of 50 and randomly generated heights), plane(represented by a blue 16\times16 square)  
 There are multiple small modules in this file:  
+
 | module | description |  
-| -------- |----------- |  
+| -------- | ----------- |  
 | plane   | 16x16 blue square that represents a plane |  
 | lava    | 16x16 red square that represents a lava. If a plane hits a lava, then 1 life would be deducted. |  
 | moutain | 50xrandom height green rectangles that represents 2 mountains. If a plane hits a mountain, then 1 life would be deducted. |  
