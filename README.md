@@ -1,2 +1,3 @@
 # csc258-Volcano-scientific-drome-operation
-The specific description of the game is specified the project proposal(.pdf)
+One sentence description of our project:
+A game of controlling planes by players to avoid obstacles such as the lava and the mountains along the way until they crash into obstacles
