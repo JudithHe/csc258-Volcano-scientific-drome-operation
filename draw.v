@@ -124,9 +124,27 @@ module random_generator(
 
 	always @(posedge clk, negedge resetn)
 	begin 
-		if (~resetn) temp <= 4'hf; 
+		if (~resetn) temp <= 4'd15; 
 		else temp <= {(temp[3]^temp[1]), temp[1:0], temp[3]};	
 	end
 
 	assign rand_out = temp[3:0];
+endmodule
+
+module random_generator_nine_bits(
+	input clk, 
+	input resetn,
+	input gameover,
+	output [9:0] rand_out);
+
+	reg [9:0] temp;
+
+	always @(posedge clk, negedge resetn)
+	begin 
+		if (~resetn) temp <= 10'b11_1111_1111; 
+		else if (~gameover) temp <= {(temp[8]^temp[6]^temp[3]^temp[1]), temp[7:0], temp[9]};
+		else temp<= 10'b00_0000_0000; 
+	end
+
+	assign rand_out = temp[9:0];
 endmodule

@@ -8,10 +8,11 @@ module Top_Level_Game(
     output VGA_HS,
     output VGA_VS,
     output [7:0] VGA_R, VGA_G, VGA_B,
-	output [6:0] HEX2, HEX1, HEX0,
+	output [6:0] HEX5, HEX2, HEX1, HEX0,
 	output VGA_BLANK_N,
 	output VGA_SYNC_N,
 	output VGA_CLK,
+	output [9:0]LEDR,
 	input CLOCK2_50,
 	// I2C Audio/Video config interface
 	output FPGA_I2C_SCLK,
@@ -47,6 +48,14 @@ module Top_Level_Game(
 	assign score = score_mountain+score_lava;
 	wire isdisplay;
 	wire [9:0] drawX,drawY;
+
+	wire [2:0] life;
+	wire [9:0] life1_x = 8'd110;
+	wire [9:0] life1_y = 8'd30;
+	wire [9:0] life2_x = 8'd120;
+	wire [9:0] life2_y = 8'd30;
+	wire [9:0] life3_x = 8'd130;
+	wire [9:0] life3_y = 8'd30;
 	
 	VGA_Controller synchGen(
 		.clk(vgaclk),
@@ -64,12 +73,19 @@ module Top_Level_Game(
 		.x(drawX),
 		.y(drawY),
 		.plane_y(plane_y),
-	    .mountain1_x(mountain1_x),
+	   .mountain1_x(mountain1_x),
 		.mountain1_y(mountain1_y),
 		.mountain2_x(mountain2_x),
 		.mountain2_y(mountain2_y),
 		.lava_x(lava_x),
 		.lava_y(lava_y),
+		.life(life),
+		.life1_x(life1_x),
+		.life1_y(life1_y),
+		.life2_x(life2_x),
+		.life2_y(life2_y),
+		.life3_x(life3_x),
+		.life3_y(life3_y),
 		.game_over(game_over),
 		.red(VGA_R),				//output
 		.green(VGA_G),				//output
@@ -94,13 +110,13 @@ module Top_Level_Game(
 		.mountain2_x(mountain2_x),		//output
 		.mountain2_y(mountain2_y),		//output
 		.score(score_mountain),
-		.difficulty(SW[1])//output
+		.difficulty(SW[0])//output
 		);
 
 	lava draw_lava( //modified
 		.clk(clk10), 
 		.resetn(KEY[1]), 
-		.difficulty(SW[1]),
+		.difficulty(SW[0]),
 		.game_over(game_over), 
 		.score(score_lava),         //output
 		.lava_x(lava_x),            //output
@@ -109,6 +125,7 @@ module Top_Level_Game(
 	
 	check_crash check_crash(
 		.resetn(KEY[1]),
+		.clk(clk10),
 		.plane_y(plane_y),
 		.mountain1_x(mountain1_x),
 		.mountain1_y(mountain1_y),
@@ -116,6 +133,7 @@ module Top_Level_Game(
 		.mountain2_y(mountain2_y),
 		.lava_x(lava_x),
 		.lava_y(lava_y),
+		.life(life),
 		.game_over(game_over)        //output
 		);
 
@@ -138,16 +156,24 @@ module Top_Level_Game(
 		.clk10(clk10)                             //output
 		);
 		
+	random_generator_nine_bits ledr_shining(.clk(clk10), .resetn(KEY[1]),.rand_out(LEDR[9:0]));
+	
+	Hex hex5(.S(life), .H(HEX5));
+	
 	// Local wires.
 	wire read_ready, write_ready, read, write;
-	wire [27:0] readdata_left, readdata_right;
-	wire [27:0] writedata_left, writedata_right;
-	wire reset = ~KEY[1];
+	wire [23:0] readdata_left, readdata_right;
+	wire [23:0] writedata_left, writedata_right;
+	wire reset = KEY[1];
 
 	/////////////////////////////////
 	// Your code goes here 
 	/////////////////////////////////
-	music player(.clk(AUD_XCK),.speaker(write),.reset(reset));
+	wire musicClk;
+	
+	music_clock musicclk(.old_clock(CLOCK_50), .new_clock(musicClk), .clear(KEY[1]));
+	music player(.clk(musicClk),.speaker(write),.reset(KEY[1]));
+	
 /////////////////////////////////////////////////////////////////////////////////
 // Audio CODEC interface. 
 //

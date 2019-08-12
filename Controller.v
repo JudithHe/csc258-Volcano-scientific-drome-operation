@@ -12,6 +12,13 @@ module Controller(
 	input [9:0] mountain2_y,
 	input [9:0] lava_x,
 	input [9:0] lava_y,
+	input [9:0] life1_x,
+	input [9:0] life1_y,
+	input [9:0] life2_x,
+	input [9:0] life2_y,
+	input [9:0] life3_x,
+	input [9:0] life3_y,
+	input [9:0] life,
 	input game_over,
 	output reg [7:0] red,
 	output reg [7:0] green,
@@ -58,6 +65,27 @@ module Controller(
 				red = 8'b11111111;
 				green = 8'b0;
 				blue = 8'b0;
+			end
+			else if ((x >= life1_x) && (x <= life1_x + 10'd8) && (y >= life1_y) && (y <= life1_y + 10'd8) && life >=3'd1)
+			begin
+				// draw the red lava
+				red = 8'b11111111;
+				green = 8'b0;
+				blue = 8'b11111111;
+			end
+			else if ((x >= life2_x) && (x <= life2_x + 10'd8) && (y >= life2_y) && (y <= life2_y + 10'd8) && life >=3'd2)
+			begin
+				// draw the red lava
+				red = 8'b11111111;
+				green = 8'b0;
+				blue = 8'b11111111;
+			end
+			else if ((x >= life3_x) && (x <= life3_x + 10'd8) && (y >= life3_y) && (y <= life3_y + 10'd8) && life ==3'd3)
+			begin
+				// draw the red lava
+				red = 8'b11111111;
+				green = 8'b0;
+				blue = 8'b11111111;
 			end
 			else 
 			begin

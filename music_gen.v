@@ -3,7 +3,10 @@ module music(
 	input reset,
 	output reg speaker
 );
+
+
 reg [30:0] tone;
+
 
 always @(posedge clk, negedge reset) begin
 	if (~reset) tone <= 0;
@@ -17,29 +20,33 @@ wire [2:0] octave;
 wire [3:0] note;
 divide_by12 get_octave_and_note(.numerator(fullnote[5:0]), .quotient(octave), .remainder(note));
 
-reg [8:0] clkdivider;
-always @*
-case(note)
-	 0: clkdivider = 9'd511;//A
-	 1: clkdivider = 9'd482;// A#/Bb
-	 2: clkdivider = 9'd455;//B
-	 3: clkdivider = 9'd430;//C
-	 4: clkdivider = 9'd405;// C#/Db
-	 5: clkdivider = 9'd383;//D
-	 6: clkdivider = 9'd361;// D#/Eb
-	 7: clkdivider = 9'd341;//E
-	 8: clkdivider = 9'd322;//F
-	 9: clkdivider = 9'd303;// F#/Gb
-	10: clkdivider = 9'd286;//G
-	11: clkdivider = 9'd270;// G#/Ab
-	default: clkdivider = 9'd0;
-endcase
+reg [23:0] clkdivider;
 
-reg [8:0] counter_note;
+always @*
+begin
+	case(note)
+		 0: clkdivider = 24'd56818;//A
+		 1: clkdivider = 24'd53648;// A#/Bb
+		 2: clkdivider = 24'd50607;//B
+		 3: clkdivider = 24'd47801;//C
+		 4: clkdivider = 24'd45126;// C#/Db
+		 5: clkdivider = 24'd42589;//D
+		 6: clkdivider = 24'd40192;// D#/Eb
+		 7: clkdivider = 24'd37936;//E
+		 8: clkdivider = 24'd71839;//F
+		 9: clkdivider = 24'd67567;// F#/Gb
+		10: clkdivider = 24'd63776;//G
+		11: clkdivider = 24'd60240;// G#/Ab
+		default: clkdivider = 24'd0;
+	endcase
+end
+
+reg [23:0] counter_note;
+
 reg [7:0] counter_octave;
 always @(posedge clk, negedge reset) begin
 	if (~reset) counter_note <= 0;
-	else counter_note <= counter_note==0 ? clkdivider : counter_note-9'd1;
+	else counter_note <= counter_note==0 ? clkdivider : counter_note-24'd1;
 	end
 always @(posedge clk, negedge reset) begin
 	if (~reset) counter_octave <= 0; 
@@ -47,7 +54,7 @@ always @(posedge clk, negedge reset) begin
 end
 always @(posedge clk, negedge reset) begin
  if (~reset) speaker <= 0; 
- else if(counter_note==0 &&counter_octave==0&&fullnote!=0 && tone[21:18]!=0) speaker <= ~speaker;
+ else if(counter_note==0&& fullnote!=0 && tone[21:18]!=0) speaker <= ~speaker;
  end
 endmodule
 

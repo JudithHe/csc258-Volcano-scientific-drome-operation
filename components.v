@@ -88,6 +88,21 @@ module screenRollClock(old_clock, new_clock, clear);
 	assign new_clock = out_clock;
 endmodule
 
+
+module music_clock(old_clock, new_clock, clear);
+	input old_clock, clear;
+	output new_clock;
+	reg out_clock;
+	//reg [26:0]counter;
+	always @(posedge old_clock, negedge clear)
+	begin
+		if (~clear) out_clock <=0;
+		else out_clock <= ~out_clock;
+	end// alwyas end
+	assign new_clock = out_clock;
+endmodule
+
+
 // HEX display on 
 module Hex(S,H);
         input [3:0]S;
