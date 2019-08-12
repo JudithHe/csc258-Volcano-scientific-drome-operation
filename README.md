@@ -17,13 +17,13 @@ pqr stackexchange page - working solution to troubleshoot the speaker's buzzing 
 2. Controller.v-> draw the current scene of the game given the coordinates of each object (the coordinates represent the top left corner of each object).  
 3. draw.v -> draw objects in the game including lava(represented by a red 16\times16 square), 2 mountains(represented by 2 green rectangles with width of 50 and randomly generated heights), plane(represented by a blue 16\times16 square)  
 There are multiple small modules in this file:  
-| module | description |
-|--------|:-----------:|
-|plane   |16x16 blue square that represents a plane|
-|lava    |16x16 red square that represents a lava. If a plane hits a lava, then 1 life would be deducted.|
-|moutain |50xrandom height green rectangles that represents 2 mountains. If a plane hits a mountain, then 1 life would be deducted.|
-|random_generator| Linear feedback shifter to generate 4 bits number to control the height of mountain.|
-|random_generator_nine_bits| Linear feedback shifter to generate 9 bits number to shine up LEDR's|
+| module | description |  
+|--------|:-----------:|  
+|plane   |16x16 blue square that represents a plane|  
+|lava    |16x16 red square that represents a lava. If a plane hits a lava, then 1 life would be deducted.|  
+|moutain |50xrandom height green rectangles that represents 2 mountains. If a plane hits a mountain, then 1 life would be deducted.|  
+|random_generator| Linear feedback shifter to generate 4 bits number to control the height of mountain.|  
+|random_generator_nine_bits| Linear feedback shifter to generate 9 bits number to shine up LEDR's|  
 
 4. check_crash.v -> Use the coordinates of the plane and the obstacles to figure out whether they crash or not. Note that, when the plane just crashes with the lava, it will only lose 1 life. But when crash with the mountain, it will lose all its lives and the game is over immediately.  
 5. SpeedController.v-> SW[0] control the rate of screen rolling and the gap’s width for lava drop coming out 
