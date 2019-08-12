@@ -30,32 +30,33 @@ module lava(
 	input clk, 
 	input resetn, 
 	input game_over, 
+	input difficulty,
 	output reg[6:0]score, 
-	output reg [9:0]lava_x
+	output reg [9:0]lava_x,
 	output reg [9:0]lava_y);
 
 	//generate a random height of the lava drop
 	reg [3:0] rand_offset;
+	reg [3:0] rand_offset2;
 	random_generator rand_offset_lava(.clk(clk), .resetn(resetn), .rand_out(lava_offset));
-
+	random_generator rand_offset_lava2(.clk(clk), .resetn(resetn), .rand_out(lava_offset2));
 	always @(posedge clk, negedge resetn)
 		begin
 			if (~resetn) 
 			begin
-				lava_x <= 9'd550;
-				lava_y <= 9'd100;
+				lava_x <= 9'd400;
+				lava_y <= 9'd50;
 			end
 			else if (~game_over) 
 				begin
-					lava_x <= lava_x - 9'd10;
+				if (difficulty) lava_x <= lava_x-rand_offset2;
+				else lava_x <= lava_x - 9'd10;
 					if (lava_x <= 9'd60)begin
-							lava_x <= 9'd550;
-							if(lava_y >= 9'd440)
-							begin
-								lava_y <=9'd100;
+							lava_x <= 9'd400;
+							if(lava_y >= 9'd400)
+								lava_y <=9'd50;
 							else
 								lava_y <=lava_y+lava_offset;
-							end
 							score <= score +1'd1;
 						end
 				end// if end
@@ -67,6 +68,7 @@ module mountain(
 	input clk, 
 	input resetn, 
 	input game_over, 
+	input difficulty,
 	output reg [3:0]score,
 	output reg[9:0] mountain1_x, 
 	output reg[9:0] mountain1_y,
@@ -75,11 +77,14 @@ module mountain(
 
 	reg[9:0] mountain_y;
 	wire[3:0] rand_offset;
+	wire[3:0] rand_offset2;
 	
 	random_generator random(.clk(clk),.resetn(resetn),.rand_out(rand_offset));
+	random_generator random2(.clk(clk),.resetn(resetn),.rand_out(rand_offset2));
 	always @(posedge clk, negedge resetn)
 		begin
 			if (~resetn) begin
+				score<=1'd0;
 				mountain1_x<=9'd300;
 				mountain1_y<=9'd150;
 				mountain2_x<=9'd500;
@@ -88,8 +93,13 @@ module mountain(
 			else if (~game_over) //if game continues
 				begin
 					mountain_y <= 9'd150+rand_offset;
+					if (difficulty) begin
+					mountain1_x <= mountain1_x-rand_offset2;
+					mountain2_x <= mountain2_x-rand_offset2;
+					end else begin
 					mountain1_x <= mountain1_x-9'd10;
 					mountain2_x <= mountain2_x-9'd10;
+					end
 				if (mountain1_x <=9'd60) begin
 					mountain1_x <= 9'd500;
 					mountain1_y <= mountain_y;

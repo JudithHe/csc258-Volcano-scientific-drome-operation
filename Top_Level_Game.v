@@ -2,7 +2,8 @@ module Top_Level_Game(
     // Global clock (50MHz)
 	input CLOCK_50,
 	// Button control(resetn, up and down)KEY[0], KEY[1]:reset
-    input [1:0] KEY,
+    input [2:0] KEY,
+	input [1:0]SW,
 	// VGA display
     output VGA_HS,
     output VGA_VS,
@@ -10,7 +11,16 @@ module Top_Level_Game(
 	output [6:0] HEX2, HEX1, HEX0,
 	output VGA_BLANK_N,
 	output VGA_SYNC_N,
-	output VGA_CLK
+	output VGA_CLK,
+	input CLOCK2_50,
+	// I2C Audio/Video config interface
+	output FPGA_I2C_SCLK,
+	inout FPGA_I2C_SDAT,
+	// Audio CODEC
+	output AUD_XCK,
+	input AUD_DACLRCK, AUD_ADCLRCK, AUD_BCLK,
+	input AUD_ADCDAT,
+	output AUD_DACDAT
     );
 
 	wire clk10;
@@ -81,12 +91,14 @@ module Top_Level_Game(
 		.mountain1_y(mountain1_y),		//output
 		.mountain2_x(mountain2_x),		//output
 		.mountain2_y(mountain2_y),		//output
-		.score(score_mountain)          //output
+		.score(score_mountain),
+		.difficulty(SW[1])//output
 		);
 
 	lava draw_lava( //modified
 		.clk(clk10), 
 		.resetn(KEY[1]), 
+		.difficulty(SW[1]),
 		.game_over(game_over), 
 		.score(score_lava),         //output
 		.lava_x(lava_x),            //output
@@ -123,4 +135,71 @@ module Top_Level_Game(
 		.game_level(SW[1]),
 		.clk10(clk10)                             //output
 		);
+		
+	// Local wires.
+	wire read_ready, write_ready, read, write;
+	wire [23:0] readdata_left, readdata_right;
+	wire [23:0] writedata_left, writedata_right;
+	wire reset = ~KEY[0];
+
+	/////////////////////////////////
+	// Your code goes here 
+	/////////////////////////////////
+	play tone(read, vgaclk, KEY[2]);
+	
+/////////////////////////////////////////////////////////////////////////////////
+// Audio CODEC interface. 
+//
+// The interface consists of the following wires:
+// read_ready, write_ready - CODEC ready for read/write operation 
+// readdata_left, readdata_right - left and right channel data from the CODEC
+// read - send data from the CODEC (both channels)
+// writedata_left, writedata_right - left and right channel data to the CODEC
+// write - send data to the CODEC (both channels)
+// AUD_* - should connect to top-level entity I/O of the same name.
+//         These signals go directly to the Audio CODEC
+// I2C_* - should connect to top-level entity I/O of the same name.
+//         These signals go directly to the Audio/Video Config module
+/////////////////////////////////////////////////////////////////////////////////
+	clock_generator my_clock_gen(
+		// inputs
+		CLOCK2_50,
+		reset,
+
+		// outputs
+		AUD_XCK
+	);
+
+	audio_and_video_config cfg(
+		// Inputs
+		CLOCK_50,
+		reset,
+
+		// Bidirectionals
+		FPGA_I2C_SDAT,
+		FPGA_I2C_SCLK
+	);
+
+	audio_codec codec(
+		// Inputs
+		CLOCK_50,
+		reset,
+
+		read,	write,
+		writedata_left, writedata_right,
+
+		AUD_ADCDAT,
+
+		// Bidirectionals
+		AUD_BCLK,
+		AUD_ADCLRCK,
+		AUD_DACLRCK,
+
+		// Outputs
+		read_ready, write_ready,
+		readdata_left, readdata_right,
+		AUD_DACDAT
+	);
+	
+	
 endmodule

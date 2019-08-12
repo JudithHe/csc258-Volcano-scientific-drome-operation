@@ -11,7 +11,6 @@ module SignalFrequency(
 	initial
 	begin
 		count = 0;
-		game_level = 0;
 		clk10 = 1;
 	end
 	
@@ -26,7 +25,7 @@ module SignalFrequency(
 						clk10 <= ~clk10;
 					end
 			end
-		else(game_level == 1)
+		else if (game_level == 1)
 			begin
 				count <= count + 1;
 				if (count == 125_0000) 
