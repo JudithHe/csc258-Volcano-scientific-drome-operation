@@ -35,8 +35,8 @@ There are multiple small modules in this file:
 
 ## Master-slave relationship
 Top_Level_Game  
-..* Hex  
-..* VGA_Controller  
-...* Controller  
-....* plane, lava, mountain  
-..* check_crash  
+  * Hex  
+  * VGA_Controller  
+   * Controller  
+    * plane, lava, mountain  
+  * check_crash  
