@@ -38,5 +38,5 @@ Top_Level_Game
   * Hex  
   * VGA_Controller  
    * Controller  
-    * plane, lava, mountain  
+    - plane, lava, mountain  
   * check_crash  
