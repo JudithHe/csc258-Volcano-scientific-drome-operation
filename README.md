@@ -7,7 +7,7 @@ A game on the monitor of controlling planes to avoid obstacles such as the lava 
 
 ## Project Design
 1. VGA_Controller.v->generate the active-low signals VGA-HS, VGA-VS by using the implementation introduced in MIT.  
-(reference: http://web.mit.edu/6.111/www/s2004/NEWKIT/vga.shtml)  
+
 2. Controller.v-> draw the current scene of the game given the coordinates of each object (the coordinates represent the top left corner of each object).  
 3. draw.v -> draw objects in the game including lava(represented by a red 16\times16 square), 2 mountains(represented by 2 green rectangles with width of 50 and randomly generated heights), plane(represented by a blue 16\times16 square)  
 There are multiple small modules in this file:  
@@ -34,3 +34,6 @@ Top_Level_Game
    * Controller  
     - plane, lava, mountain  
   * check_crash  
+## External Reference
+VGA_Controller.v - (reference: http://web.mit.edu/6.111/www/s2004/NEWKIT/vga.shtml)  
+It provides the parameters for the vga display resolution of 640x480, such as front porch , back porch, horizontal and vertical colour_scan.    
