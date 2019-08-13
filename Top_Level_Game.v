@@ -1,13 +1,13 @@
 module Top_Level_Game(
-    // Global clock (50MHz)
+        // Global clock (50MHz)
 	input CLOCK_50,
 	// Button control(resetn, up and down)KEY[0], KEY[1]:reset
-    input [2:0] KEY,
+    	input [2:0] KEY,
 	input [1:0]SW,
 	// VGA display
-    output VGA_HS,
-    output VGA_VS,
-    output [7:0] VGA_R, VGA_G, VGA_B,
+   	output VGA_HS,
+    	output VGA_VS,
+    	output [7:0] VGA_R, VGA_G, VGA_B,
 	output [6:0] HEX5, HEX2, HEX1, HEX0,
 	output VGA_BLANK_N,
 	output VGA_SYNC_N,
@@ -57,13 +57,13 @@ module Top_Level_Game(
 	wire [9:0] life3_x = 8'd130;
 	wire [9:0] life3_y = 8'd30;
 	
-	VGA_Controller synchGen(
+	VGA_Controller signal_generator(
 		.clk(vgaclk),
 		.resetn(KEY[1]),
-		.vga_HS(VGA_HS),        //output
+		.vga_HS(VGA_HS),        	//output
 		.vga_VS(VGA_VS),		//output
-		.X(drawX),				//output
-		.Y(drawY),				//output
+		.X(drawX),			//output
+		.Y(drawY),			//output
 		.display(isdisplay)		//output
 		);
 	
@@ -73,7 +73,7 @@ module Top_Level_Game(
 		.x(drawX),
 		.y(drawY),
 		.plane_y(plane_y),
-	   .mountain1_x(mountain1_x),
+	        .mountain1_x(mountain1_x),
 		.mountain1_y(mountain1_y),
 		.mountain2_x(mountain2_x),
 		.mountain2_y(mountain2_y),
@@ -105,7 +105,7 @@ module Top_Level_Game(
 		.clk(clk10),
 		.resetn(KEY[1]),
 		.game_over(game_over),
-	    .mountain1_x(mountain1_x),		//output
+	        .mountain1_x(mountain1_x),		//output
 		.mountain1_y(mountain1_y),		//output
 		.mountain2_x(mountain2_x),		//output
 		.mountain2_y(mountain2_y),		//output
@@ -118,9 +118,9 @@ module Top_Level_Game(
 		.resetn(KEY[1]), 
 		.difficulty(SW[0]),
 		.game_over(game_over), 
-		.score(score_lava),         //output
-		.lava_x(lava_x),            //output
-		.lava_y(lava_y)				//output
+		.score(score_lava),          	//output
+		.lava_x(lava_x),            	//output
+		.lava_y(lava_y)			//output
 		);
 	
 	check_crash check_crash(
@@ -146,8 +146,8 @@ module Top_Level_Game(
 		.clk(vgaclk),
 		.score(score_lava+score_mountain),
 		.HEX0(HEX0),                              //output
-		.HEX1(HEX1),							  //output
-		.HEX2(HEX2)								  //output
+		.HEX1(HEX1),				  //output
+		.HEX2(HEX2)				  //output
 		);
 	
 	SpeedController speedcontroller(
