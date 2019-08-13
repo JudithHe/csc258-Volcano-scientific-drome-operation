@@ -150,9 +150,9 @@ module Top_Level_Game(
 		.HEX2(HEX2)								  //output
 		);
 	
-	SignalFrequency signalfrequency(
+	SpeedController speedcontroller(
 		.clk(CLOCK_50),
-		.game_level(SW[1]),
+		.game_level(SW[0]),
 		.clk10(clk10)                             //output
 		);
 		
