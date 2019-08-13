@@ -6,12 +6,6 @@ A game on the monitor of controlling planes to avoid obstacles such as the lava 
 ## Top Level Module name: Top_Level_Game in Top_Level_Game.v
 
 ## Project Design
-state the name of each module in your project and a one-sentence description of what function it performs. Add any additional statements as required to explain how the different modules work with each other (data dependencies, master-slave relationship etc.)
-list the Verilog modules were not created by you: VGA adapter, keyboard etc.
-state the resources (and their URLs) that you used to create the project and their role/use. For example:
-abc GitHub repo - basic source code for the player avatar display
-xyz uni project page - main idea for the game
-pqr stackexchange page - working solution to troubleshoot the speaker's buzzing issue  
 1. VGA_Controller.v->generate the active-low signals VGA-HS, VGA-VS by using the implementation introduced in MIT.  
 (reference: http://web.mit.edu/6.111/www/s2004/NEWKIT/vga.shtml)  
 2. Controller.v-> draw the current scene of the game given the coordinates of each object (the coordinates represent the top left corner of each object).  
