@@ -1,6 +1,6 @@
 module check_crash(
     input resetn,
-	 input clk,
+    input clk,
     input [9:0] plane_y,
     input [9:0] mountain1_x,
     input [9:0] mountain1_y,
