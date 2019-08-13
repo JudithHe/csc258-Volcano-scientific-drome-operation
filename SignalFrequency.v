@@ -1,5 +1,5 @@
 //Determine the speed of the game
-module SignalFrequency(
+module SpeedController(
     // input CLOCK_50, //for test
 	input clk,
 	input game_level,//has normal level:0 or difficult level:1
