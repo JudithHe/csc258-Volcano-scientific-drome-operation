@@ -1,11 +1,11 @@
 # csc258-Volcano-scientific-drome-operation
 
-One sentence description of our project:  
+## One sentence description of our project:  
 A game on the monitor of controlling planes to avoid obstacles such as the lava and the mountains by using the switches on KEYs and switches on the De1-soC board.
 
-Top Level Module name: Top_Level_Game in Top_Level_Game.v
+## Top Level Module name: Top_Level_Game in Top_Level_Game.v
 
-Project Design
+## Project Design
 state the name of each module in your project and a one-sentence description of what function it performs. Add any additional statements as required to explain how the different modules work with each other (data dependencies, master-slave relationship etc.)
 list the Verilog modules were not created by you: VGA adapter, keyboard etc.
 state the resources (and their URLs) that you used to create the project and their role/use. For example:
@@ -30,5 +30,13 @@ There are multiple small modules in this file:
 5. SpeedController.v-> SW[0] control the rate of screen rolling and the gap’s width for lava drop coming out 
 6. ScoreDisplay.v -> track current player’s score, increment every time that the player avoid crashing with a lava or a mountain.  
 7. VGAFrequency.v ->change the frequency of the vgaclk to 25MHZ to slow down the frequency of the VGA-display  
+8. Top_Level_Game.v -> The overall top level design for integration of all modules.
+9. components.v -> Hex light controller to indicate the life remaining for the player on HEX5. Initially it would be 3.  
 
-
+## Master-slave relationship
+Top_Level_Game  
+..* Hex  
+..* VGA_Controller  
+...* Controller  
+....* plane, lava, mountain  
+..* check_crash  
